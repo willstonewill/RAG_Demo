@@ -1,6 +1,5 @@
 chromadb==0.5.5
 protobuf~=3.19.0
-python==3.11.9
 streamlit
 langchain
 langchain_community
