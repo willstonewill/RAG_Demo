@@ -1,7 +1,7 @@
 protobuf~=3.19.0
 langchain==0.1.20
 chromadb
-streamlit
+streamlit==13.8.0
 langchain_community
 langchain_experimental
 langchain_openai
