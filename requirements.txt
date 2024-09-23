@@ -7,3 +7,4 @@ langchain_experimental
 langchain_openai
 langchain_core
 pysqlite3-binary
+pymupdf
