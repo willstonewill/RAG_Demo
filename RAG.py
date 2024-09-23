@@ -10,7 +10,7 @@ from langchain_community.vectorstores.chroma import Chroma
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import os
 
 st.set_page_config(page_title="RAG demo", layout="wide")
@@ -79,7 +79,8 @@ def user_input(user_question, api_key, chat_history):
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
     rag_chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough(), "chat_history": chat_history}
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | MessagesPlaceholder("chat_history")
     | prompt
     | model
     | StrOutputParser()
