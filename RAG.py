@@ -47,6 +47,7 @@ def get_pdf_text(pdf_docs):
         loader = PyMuPDFLoader(file_name)
         data = loader.load()
         documents.extend(data)
+        os.remove(file_name)
     return documents
 
 def get_text_chunks(text):
