@@ -1,11 +1,4 @@
 import streamlit as st
-from PyPDF2 import PdfReader
-# from langchain.text_splitter import RecursiveCharacterTextSplitter
-# from langchain_google_genai import GoogleGenerativeAIEmbeddings
-# import google.generativeai as genai
-# from langchain.vectorstores import FAISS
-# from langchain_google_genai import ChatGoogleGenerativeAI
-# from langchain.chains.question_answering import load_qa_chain
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai.embeddings import OpenAIEmbeddings
