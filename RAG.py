@@ -103,8 +103,9 @@ def user_input(user_question, api_key, chat_history):
           message2.write(i)
     
 def reset_conversation():
-  st.session_state.conversation = []
-  st.session_state.chat_history = []
+  st.session_state["chat_answers_history"] = []
+  st.session_state["user_prompt_history"] = []
+  st.session_state["chat_history"] = []
 
 def main():
     st.header("RAG chatbot💁")
