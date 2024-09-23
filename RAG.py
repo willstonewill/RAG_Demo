@@ -62,12 +62,13 @@ def get_vector_store(text_chunks, api_key):
 def format_docs(docs):
     return "\n\n".join(doc.page_content + f"\treport: {doc.metadata['source'].rsplit('/', 1)[-1].replace('.pdf', '')}" + f"\tpage: {doc.metadata['page']}" for doc in docs)
 
-def user_input(user_question, api_key):
+def user_input(user_question, api_key, chat_history):
     system_prompt = """
     Answer the question as detailed as possible from the provided context, include accurate document name and page number in the end in a new line, make sure to provide all the details, 
     if the answer is not in provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
     Context:\n {context}?\n
     Question: \n{question}\n
+    Chat history: \n {chat_history}\n
 
     Answer:
     """
@@ -88,16 +89,36 @@ def user_input(user_question, api_key):
     for chunk in rag_chain.stream(user_question):
         response += chunk
 
-    st.write("Reply: ", response)
+    st.session_state["chat_answers_history"].append(response)
+    st.session_state["user_prompt_history"].append(prompt)
+    st.session_state["chat_history"].append((prompt,response))
+
+    #st.write("Reply: ", response)
+
+    if st.session_state["chat_answers_history"]:
+       for i, j in zip(st.session_state["chat_answers_history"],st.session_state["user_prompt_history"]):
+          message1 = st.chat_message("user")
+          message1.write(j)
+          message2 = st.chat_message("assistant")
+          message2.write(i)
     
 
 def main():
     st.header("RAG chatbot💁")
 
-    user_question = st.text_input("Ask a Question from the PDF Files", key="user_question")
+    #user_question = st.text_input("Ask a Question from the PDF Files", key="user_question")
+
+    user_question = st.chat_input("Enter your questions here")
+    if "user_prompt_history" not in st.session_state:
+       st.session_state["user_prompt_history"]=[]
+    if "chat_answers_history" not in st.session_state:
+       st.session_state["chat_answers_history"]=[]
+    if "chat_history" not in st.session_state:
+       st.session_state["chat_history"]=[]
 
     if user_question and api_key:  # Ensure API key and user question are provided
-        user_input(user_question, api_key)
+        with st.spinner("Generating......"):
+            user_input(user_question, api_key, chat_history = st.session_state["chat_history"])
 
     with st.sidebar:
         st.title("Menu:")
