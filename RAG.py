@@ -90,7 +90,7 @@ def user_input(user_question, api_key, chat_history):
         response += chunk
 
     st.session_state["chat_answers_history"].append(response)
-    st.session_state["user_prompt_history"].append(prompt)
+    st.session_state["user_prompt_history"].append(user_question)
     st.session_state["chat_history"].append((prompt,response))
 
     #st.write("Reply: ", response)
