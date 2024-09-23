@@ -102,6 +102,9 @@ def user_input(user_question, api_key, chat_history):
           message2 = st.chat_message("assistant")
           message2.write(i)
     
+def reset_conversation():
+  st.session_state.conversation = None
+  st.session_state.chat_history = None
 
 def main():
     st.header("RAG chatbot💁")
@@ -129,6 +132,8 @@ def main():
                 text_chunks = get_text_chunks(raw_text)
                 get_vector_store(text_chunks, api_key)
                 st.success("Done")
+
+    st.button('Reset Chat', on_click=reset_conversation)
 
 if __name__ == "__main__":
     main()
