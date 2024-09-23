@@ -79,7 +79,7 @@ def user_input(user_question, api_key, chat_history):
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
     rag_chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough(), "chat_history": RunnablePassthrough()}
+    {"context": retriever | format_docs, "question": RunnablePassthrough(), "chat_history": chat_history}
     | prompt
     | model
     | StrOutputParser()
