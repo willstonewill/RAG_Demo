@@ -73,14 +73,13 @@ def user_input(user_question, api_key, chat_history):
     Answer:
     """
     model = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=api_key)
-    prompt =    (system_prompt)
+    prompt = ChatPromptTemplate.from_template(system_prompt)
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
     vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embedding)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
     rag_chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough()}
-    | MessagesPlaceholder("chat_history")
+    {"context": retriever | format_docs, "question": RunnablePassthrough(), MessagesPlaceholder("chat_history")}
     | prompt
     | model
     | StrOutputParser()
