@@ -52,7 +52,7 @@ def get_text_chunks(text):
 
 def get_vector_store(text_chunks, api_key):
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
-    vectorstore = Chroma.from_documents(documents=text_chunks, embedding=embedding, persist_directory="./chroma_db")
+    vectorstore = Chroma.from_documents(documents=text_chunks, embedding=embedding, persist_directory="chroma_db")
     vectorstore.persist()
 
 def format_docs(docs):
@@ -70,7 +70,7 @@ def user_input(user_question, api_key):
     model = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=api_key)
     prompt = ChatPromptTemplate.from_template(system_prompt)
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
-    vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embedding)
+    vectorstore = Chroma(persist_directory="chroma_db", embedding_function=embedding)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
     rag_chain = (
