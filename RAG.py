@@ -7,7 +7,7 @@ from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai.embeddings import OpenAIEmbeddings
 #from langchain_community.vectorstores.chroma import Chroma
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -80,7 +80,7 @@ def user_input(user_question, api_key, chat_history):
     prompt = ChatPromptTemplate.from_template(system_prompt)
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
     #vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embedding)
-    vectorstore = FAISS.load_local("faiss_index", embedding)
+    vectorstore = FAISS.load_local("faiss_index", embedding, allow_dangerous_deserialization=True)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
     rag_chain = (
