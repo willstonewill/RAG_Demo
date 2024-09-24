@@ -77,7 +77,7 @@ def get_vector_store(text_chunks, api_key):
 def format_docs(docs):
     return "\n\n".join(doc.page_content + f"\treport: {doc.metadata['source'].rsplit('/', 1)[-1].replace('.pdf', '')}" + f"\tpage: {doc.metadata['page']}" for doc in docs)
 
-def get_chathistory(chat_history):
+def get_chathistory():
     #print("".join(st.session_state["chat_history"]))
     if 'chat_history' in st.session_state:
         st.write("".join(st.session_state["chat_history"]))
