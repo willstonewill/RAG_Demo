@@ -124,7 +124,7 @@ def user_input(user_question, api_key, chat_history):
     | StrOutputParser()
     )
     
-    st.write(get_chathistory(list(chat_history)))
+    st.write(get_chathistory(chat_history))
 
     response = ""
     for chunk in rag_chain.stream(user_question):
@@ -132,7 +132,7 @@ def user_input(user_question, api_key, chat_history):
 
     st.session_state["chat_answers_history"].append(response)
     st.session_state["user_prompt_history"].append(user_question)
-    st.session_state["chat_history"].append((prompt,response))
+    st.session_state["chat_history"].append(f"prompt:\n{prompt}\nanswer:\n{response}")
 
     #st.write("Reply: ", response)
 
