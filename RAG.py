@@ -124,7 +124,7 @@ def user_input(user_question, api_key, chat_history):
     | StrOutputParser()
     )
     
-    st.write(prompt)
+    st.write(get_chathistory(chat_history))
 
     response = ""
     for chunk in rag_chain.stream(user_question):
