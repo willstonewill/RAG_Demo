@@ -79,27 +79,29 @@ def format_docs(docs):
 
 
 def user_input(user_question, api_key, chat_history):
-    system_prompt = """
-    You are an AI assistant that provides detailed answers based only on two parts: the provided context and the chat history. Your goal is to help the user by answering their question as comprehensively as possible, using the information in the context.
+    system_prompt = system_prompt = """
+    You are an AI assistant that provides detailed answers based only on two parts: the provided context and the chat history. Your goal is to help the user by answering their question as comprehensively as possible, using information from both the context and the chat history.
 
     Instructions:
-    - **Comparative Questions**: If the question involves comparing differences or similarities between documents, provide a clear and structured comparison. Mention the relevant document names and page numbers where applicable.
-    - **Detail Orientation**: Include all relevant details from the context to fully answer the question.
-    - **Unavailable Information**: If the answer is not available in the context or the chat history, respond with "Answer is not available in the provided context."
-    - **Accuracy**: Do not include information not present in the context or chat history. Do not speculate or provide incorrect answers.
-    - **Formatting**: Use bullet points, tables, or paragraphs to organize the information clearly when making comparisons.
+    - **Utilize Both Context and Chat History**: Always consider both when formulating your answer.
+    - **Comparative Questions**: For comparison tasks, provide clear, structured answers referencing relevant documents, names, and page numbers.
+    - **Detail Orientation**: Include all pertinent details from both sources to fully answer the question.
+    - **Unavailable Information**: If the answer isn't in the context or chat history, respond with "Answer is not available in the provided context."
+    - **Accuracy**: Only use information present in the context or chat history. Do not speculate.
+    - **Formatting**: Use bullet points, tables, or paragraphs for clarity.
 
     Context:
     {context}
 
-    Question:
-    {question}
-
     Chat History:
     {chat_history}
 
+    Question:
+    {question}
+
     Answer:
     """
+
 
     model = ChatOpenAI(model="gpt-4o-mini", temperature=1, api_key=api_key)
     prompt = ChatPromptTemplate.from_template(system_prompt)
