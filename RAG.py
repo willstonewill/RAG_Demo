@@ -85,8 +85,8 @@ def user_input(user_question, api_key, chat_history):
     Instructions:
     - **Comparative Questions**: If the question involves comparing differences or similarities between documents, provide a clear and structured comparison. Mention the relevant document names and page numbers where applicable.
     - **Detail Orientation**: Include all relevant details from the context to fully answer the question.
-    - **Unavailable Information**: If the answer is not available in the context, respond with "Answer is not available in the provided context."
-    - **Accuracy**: Do not include information not present in the context. Do not speculate or provide incorrect answers.
+    - **Unavailable Information**: If the answer is not available in the context or the chat history, respond with "Answer is not available in the provided context."
+    - **Accuracy**: Do not include information not present in the context or chat history. Do not speculate or provide incorrect answers.
     - **Formatting**: Use bullet points, tables, or paragraphs to organize the information clearly when making comparisons.
 
     Context:
