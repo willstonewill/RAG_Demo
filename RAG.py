@@ -12,6 +12,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+#import uuid
 import os
 
 st.set_page_config(page_title="RAG demo", layout="wide")
@@ -37,6 +38,14 @@ Follow these simple steps to interact with the chatbot:
 # This is the first API key input; no need to repeat it in the main function.
 api_key = st.text_input("Enter your OpenAI API Key:", type="password", key="api_key_input")
 
+# def get_session_id():
+#     if 'session_id' not in st.session_state:
+#         # Generate a new UUID and store it in session_state
+#         st.session_state['session_id'] = str(uuid.uuid4())
+#     return st.session_state['session_id']
+
+# session_id = get_session_id()
+
 def get_pdf_text(pdf_docs):
     
     documents = []
@@ -60,8 +69,10 @@ def get_vector_store(text_chunks, api_key):
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
     # vectorstore = Chroma.from_documents(documents=text_chunks, embedding=embedding, persist_directory="./chroma_db")
     # vectorstore.persist()
+    
+    # Create and store the vectorstore in session_state
     vectorstore = FAISS.from_documents(text_chunks, embedding=embedding)
-    vectorstore.save_local("faiss_index")
+    st.session_state['vectorstore'] = vectorstore
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content + f"\treport: {doc.metadata['source'].rsplit('/', 1)[-1].replace('.pdf', '')}" + f"\tpage: {doc.metadata['page']}" for doc in docs)
@@ -97,8 +108,12 @@ def user_input(user_question, api_key, chat_history):
     prompt = ChatPromptTemplate.from_template(system_prompt)
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
     #vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embedding)
-    vectorstore = FAISS.load_local("faiss_index", embedding, allow_dangerous_deserialization=True)
-    retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
+    if 'vectorstore' in st.session_state:
+    #vectorstore = FAISS.load_local("faiss_index", embedding, allow_dangerous_deserialization=True)
+        vectorstore = st.session_state['vectorstore']
+        retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
+    else:
+        st.write("The files uploaded are too large to be stored!")
 
 
     rag_chain = (
