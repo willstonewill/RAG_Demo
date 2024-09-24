@@ -71,14 +71,27 @@ def get_chathistory(chat_history):
 
 def user_input(user_question, api_key, chat_history):
     system_prompt = """
-    Answer the question as detailed as possible from the provided context, include accurate document name and page number in the end in a new line, make sure to provide all the details, 
-    if the answer is not in provided context just say, "answer is not available in the context", don't provide the wrong answer\n\n
-    Context:\n {context}?\n
-    Question: \n{question}\n
-    Chat history: \n {chat_history}\n
+    You are an AI assistant that provides detailed answers based solely on the provided context. Your goal is to help the user by answering their question as comprehensively as possible, using the information in the context.
+
+    Instructions:
+    - **Comparative Questions**: If the question involves comparing differences or similarities between documents, provide a clear and structured comparison. Mention the relevant document names and page numbers where applicable.
+    - **Detail Orientation**: Include all relevant details from the context to fully answer the question.
+    - **Unavailable Information**: If the answer is not available in the context, respond with "Answer is not available in the provided context."
+    - **Accuracy**: Do not include information not present in the context. Do not speculate or provide incorrect answers.
+    - **Formatting**: Use bullet points, tables, or paragraphs to organize the information clearly when making comparisons.
+
+    Context:
+    {context}
+
+    Question:
+    {question}
+
+    Chat History:
+    {chat_history}
 
     Answer:
     """
+
     model = ChatOpenAI(model="gpt-4o-mini", temperature=1, api_key=api_key)
     prompt = ChatPromptTemplate.from_template(system_prompt)
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
