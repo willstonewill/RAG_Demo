@@ -79,7 +79,7 @@ def format_docs(docs):
 
 def get_chathistory(chat_history):
     #print("".join(st.session_state["chat_history"]))
-    if "chat_history" in st.session_state:
+    if st.session_state['chat_history']:
         st.write("".join(st.session_state["chat_history"]))
         return "".join(st.session_state["chat_history"]) 
     else:
