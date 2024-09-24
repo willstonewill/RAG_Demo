@@ -80,7 +80,7 @@ def user_input(user_question, api_key, chat_history):
     prompt = ChatPromptTemplate.from_template(system_prompt)
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
     #vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embedding)
-    vectorstore = FAISS.load_local("faiss_index", embeddings)
+    vectorstore = FAISS.load_local("faiss_index", embedding)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
     rag_chain = (
