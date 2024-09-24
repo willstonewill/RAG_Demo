@@ -12,7 +12,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.schema import Runnable
+from langchain_core.runnables.base import Runnable
 import os
 
 st.set_page_config(page_title="RAG demo", layout="wide")
