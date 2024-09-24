@@ -1,12 +1,13 @@
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# __import__('pysqlite3')
+# import sys
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai.embeddings import OpenAIEmbeddings
-from langchain_community.vectorstores.chroma import Chroma
+#from langchain_community.vectorstores.chroma import Chroma
+from langchain.vectorstores import FAISS
 from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -57,8 +58,10 @@ def get_text_chunks(text):
 
 def get_vector_store(text_chunks, api_key):
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
-    vectorstore = Chroma.from_documents(documents=text_chunks, embedding=embedding, persist_directory="./chroma_db")
-    vectorstore.persist()
+    # vectorstore = Chroma.from_documents(documents=text_chunks, embedding=embedding, persist_directory="./chroma_db")
+    # vectorstore.persist()
+    vectorstore = FAISS.from_texts(text_chunks, embedding=embeddings)
+    vectorstore.save_local("faiss_index")
 
 def format_docs(docs):
     return "\n\n".join(doc.page_content + f"\treport: {doc.metadata['source'].rsplit('/', 1)[-1].replace('.pdf', '')}" + f"\tpage: {doc.metadata['page']}" for doc in docs)
@@ -76,7 +79,8 @@ def user_input(user_question, api_key, chat_history):
     model = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=api_key)
     prompt = ChatPromptTemplate.from_template(system_prompt)
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
-    vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embedding)
+    #vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=embedding)
+    vectorstore = FAISS.load_local("faiss_index", embeddings)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
     rag_chain = (
