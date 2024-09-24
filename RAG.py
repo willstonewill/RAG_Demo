@@ -123,6 +123,8 @@ def user_input(user_question, api_key, chat_history):
     | model
     | StrOutputParser()
     )
+    
+    st.write(prompt)
 
     response = ""
     for chunk in rag_chain.stream(user_question):
