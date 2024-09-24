@@ -66,6 +66,9 @@ def get_vector_store(text_chunks, api_key):
 def format_docs(docs):
     return "\n\n".join(doc.page_content + f"\treport: {doc.metadata['source'].rsplit('/', 1)[-1].replace('.pdf', '')}" + f"\tpage: {doc.metadata['page']}" for doc in docs)
 
+def get_chathistory(chat_history):
+    return " ".join(chat_history) 
+
 def user_input(user_question, api_key, chat_history):
     system_prompt = """
     Answer the question as detailed as possible from the provided context, include accurate document name and page number in the end in a new line, make sure to provide all the details, 
@@ -83,8 +86,9 @@ def user_input(user_question, api_key, chat_history):
     vectorstore = FAISS.load_local("faiss_index", embedding, allow_dangerous_deserialization=True)
     retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
 
+
     rag_chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough(), "chat_history": MessagesPlaceholder("chat_history")}
+    {"context": retriever | format_docs, "question": RunnablePassthrough(), "chat_history": get_chathistory}
     | prompt
     | model
     | StrOutputParser()
