@@ -60,7 +60,7 @@ def get_vector_store(text_chunks, api_key):
     embedding = OpenAIEmbeddings(openai_api_key=api_key)
     # vectorstore = Chroma.from_documents(documents=text_chunks, embedding=embedding, persist_directory="./chroma_db")
     # vectorstore.persist()
-    vectorstore = FAISS.from_texts(text_chunks, embedding=embeddings)
+    vectorstore = FAISS.from_texts(text_chunks, embedding=embedding)
     vectorstore.save_local("faiss_index")
 
 def format_docs(docs):
