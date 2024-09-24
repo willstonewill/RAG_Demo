@@ -12,7 +12,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables.base import Runnable
+from langchain_core.runnables.base import RunnableLambda
 import os
 
 st.set_page_config(page_title="RAG demo", layout="wide")
@@ -77,9 +77,6 @@ def get_vector_store(text_chunks, api_key):
 def format_docs(docs):
     return "\n\n".join(doc.page_content + f"\treport: {doc.metadata['source'].rsplit('/', 1)[-1].replace('.pdf', '')}" + f"\tpage: {doc.metadata['page']}" for doc in docs)
 
-class ChatHistoryRunnable(Runnable):
-    def invoke(self, _):
-        return st.session_state.get("chat_history", "")
 
 def user_input(user_question, api_key, chat_history):
     system_prompt = """
@@ -115,9 +112,11 @@ def user_input(user_question, api_key, chat_history):
     else:
         st.write("Pleas make sure you uploaded pdf files and clicked sumbit! And make sure the file size is not too large.")
 
+    chat_history_runnable = RunnableLambda(lambda _: st.session_state.get("chat_history", ""))
+
 
     rag_chain = (
-    {"context": retriever | format_docs, "question": RunnablePassthrough(), "chat_history": ChatHistoryRunnable()}
+    {"context": retriever | format_docs, "question": RunnablePassthrough(), "chat_history": chat_history_runnable}
     | prompt
     | model
     | StrOutputParser()
