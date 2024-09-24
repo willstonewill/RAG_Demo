@@ -83,7 +83,7 @@ def get_chathistory(chat_history):
 
 def user_input(user_question, api_key, chat_history):
     system_prompt = """
-    You are an AI assistant that provides detailed answers based solely on the provided context. Your goal is to help the user by answering their question as comprehensively as possible, using the information in the context.
+    You are an AI assistant that provides detailed answers based only on two parts: the provided context and the chat history. Your goal is to help the user by answering their question as comprehensively as possible, using the information in the context.
 
     Instructions:
     - **Comparative Questions**: If the question involves comparing differences or similarities between documents, provide a clear and structured comparison. Mention the relevant document names and page numbers where applicable.
@@ -113,7 +113,7 @@ def user_input(user_question, api_key, chat_history):
         vectorstore = st.session_state['vectorstore']
         retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 10})
     else:
-        st.write("The files uploaded are too large to be stored!")
+        st.write("Pleas make sure you uploaded pdf files and clicked sumbit! And make sure the file size is not too large.")
 
 
     rag_chain = (
