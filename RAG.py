@@ -67,6 +67,7 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content + f"\treport: {doc.metadata['source'].rsplit('/', 1)[-1].replace('.pdf', '')}" + f"\tpage: {doc.metadata['page']}" for doc in docs)
 
 def get_chathistory(chat_history):
+    print(" ".join(chat_history))
     return " ".join(chat_history) 
 
 def user_input(user_question, api_key, chat_history):
