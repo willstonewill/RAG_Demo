@@ -61,12 +61,12 @@ def get_pdf_text(pdf_docs):
     return documents
 
 def get_text_chunks(text):
-    text_splitter = SemanticChunker(OpenAIEmbeddings(model="gpt-4o-2024-08-06",openai_api_key=api_key), add_start_index=True)
+    text_splitter = SemanticChunker(OpenAIEmbeddings(model="text-embedding-3-large",openai_api_key=api_key), add_start_index=True)
     chunks = text_splitter.split_documents(text)
     return chunks
 
 def get_vector_store(text_chunks, api_key):
-    embedding = OpenAIEmbeddings(model="gpt-4o-2024-08-06", openai_api_key=api_key)
+    embedding = OpenAIEmbeddings(model="text-embedding-3-large", openai_api_key=api_key)
     # vectorstore = Chroma.from_documents(documents=text_chunks, embedding=embedding, persist_directory="./chroma_db")
     # vectorstore.persist()
     
