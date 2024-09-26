@@ -20,7 +20,7 @@ st.set_page_config(page_title="RAG demo", layout="wide")
 st.markdown("""
 ## Get insights from your Documents
 
-This chatbot is built using the Retrieval-Augmented Generation (RAG) framework, leveraging OpenAI model GPT-4o-mini. It processes uploaded PDF documents by breaking them down into manageable chunks, creates a searchable vector store, and generates accurate answers to user queries. This advanced approach ensures high-quality, contextually relevant responses for an efficient and effective user experience.
+This chatbot is built using the Retrieval-Augmented Generation (RAG) framework, leveraging OpenAI model GPT-4o. It processes uploaded PDF documents by breaking them down into manageable chunks, creates a searchable vector store, and generates accurate answers to user queries. This advanced approach ensures high-quality, contextually relevant responses for an efficient and effective user experience.
 
 ### How It Works
 
@@ -31,6 +31,8 @@ Follow these simple steps to interact with the chatbot:
 2. **Upload Your Documents**: The system accepts multiple PDF files at once, analyzing the content to provide comprehensive insights.
 
 3. **Ask a Question**: After processing the documents, ask any question related to the content of your uploaded documents for a precise answer.
+
+### Do NOT upload any sensitive data!
 """)
 
 
